@@ -16,13 +16,38 @@ class Shape:
 
 class Tetromino:
     def __init__(self, x, y, shape: Shape, rotation=0):
-        i =0
+        self.x = x
+        self.y = y
+        self.shape = shape
+        self.rotation = rotation
+
+    def move(self, x, y):
+        self.x += x
+        self.y += y
 
 class Board:
     def __init__(self, width, height):
         self.width = width
         self.height = height
         self.grid = [[0 for _ in range(width)] for _ in range(height)]
+        self.piece = None
+        self.next_piece = None
+        self.bag = random_bag()
+        self.can_hold = True
+
+    def get_piece(self):
+        if self.next_piece is not None:
+            self.piece = self.next_piece
+        else:
+            self.piece = self.bag.pop()
+
+        self.piece_next = self.bag.pop()
+        self.piece.move(self.width//2, 0)
+        self.can_hold = True
+
+        if not self.bag:
+            self.bag = random_bag()
+
 
 
 # Define the Tetromino 'S' shape with both possible orientations
